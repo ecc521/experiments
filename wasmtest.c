@@ -1,6 +1,4 @@
-#include <stdlib.h>
-
-unsigned char getbuf(unsigned long len) {
+unsigned char allocate(unsigned long len) {
   unsigned char * mem = malloc(len);
   
   for (unsigned long i=0;i<len;i++) {
