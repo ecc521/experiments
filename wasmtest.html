@@ -53,10 +53,10 @@
     console.log(strBuf)
 	
 	
-	let ptr2 = wasmInstance.exports.set(ptr, buflen)
-	console.log(ptr2)
-	let modbuf = new Uint8Array(memory.buffer, ptr, buflen);
-	console.log(modbuf)
+    let ptr2 = wasm.set(ptr, buflen)
+    console.log(ptr2)
+    let modbuf = new Uint8Array(memory.buffer, ptr, buflen);
+    console.log(modbuf)
 
 	
       
