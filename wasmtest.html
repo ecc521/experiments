@@ -24,7 +24,15 @@
 
     (async function getwasmfunctions() {
     let module = await WebAssembly.compileStreaming(fetch("https://ecc521.github.io/experiments/test.wasm"));
-    let importobj = {}
+    let importobj = {
+        env: {
+          // null
+          malloc: function malloc () {
+            // ...
+          }
+        }
+      };
+      
     let instance = await WebAssembly.instantiate(module, importobj);
     loadexports(instance)
   
