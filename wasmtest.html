@@ -22,12 +22,14 @@
         }  
     }
 
-  
+    (async function getwasmfunctions() {
     let module = await WebAssembly.compileStreaming(fetch("https://ecc521.github.io/experiments/test.wasm"));
     let importobj = {}
     let instance = await WebAssembly.instantiate(module, importobj);
     loadexports(instance)
   
     console.log(wasm)
-
+    }())
+  
+  
 </script>
