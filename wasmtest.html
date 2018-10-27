@@ -41,8 +41,8 @@
     let memory = instance.exports.memory;	
 	  memory.grow(9)
       
-    console.log(wasmInstance.exports.memory.buffer.byteLength)
-
+	    
+    console.log(memory.buffer.byteLength)
     console.log(memory)
 
     let buflen = 100000
