@@ -38,9 +38,8 @@
   
     console.log(wasm)
       
-    let memory = instance.exports.memory;	
-	  memory.grow(9)
-      
+    let memory = instance.exports.memory;
+	memory.grow(9);
 	    
     console.log(memory.buffer.byteLength)
     console.log(memory)
