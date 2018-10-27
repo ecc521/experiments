@@ -4,7 +4,7 @@ var wasmModule = new WebAssembly.Module(wasmCode);
 var wasmInstance = new WebAssembly.Instance(wasmModule, wasmImports);
 //log(wasmInstance.exports.getChar(0));
 
-wasmInstance.exports.memory = new WebAssembly.Memory({initial:20});
+wasmInstance.exports.memory = new WebAssembly.Memory({initial:20});//This line is useless... Huh
 
 const memory = wasmInstance.exports.memory;
 //const strBuf = new Uint8Array(memory.buffer, wasmInstance.exports.getStrOffset());
