@@ -7,7 +7,11 @@
 
   <body>
     <script>
-      navigator.serviceWorker.register("https://ecc521.github.io/experiments/notifications/sw.js")
+      let baseurl = "https://ecc521.github.io/experiments/notifications/"
+      navigator.serviceWorker.register(baseurl + "sw.js")
+      
+      Notification.requestPermission()
+      
     </script>
     
     
