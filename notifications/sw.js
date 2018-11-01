@@ -1,3 +1,5 @@
+const maincache = "rivers.run"
+
 function handlefetch(event) {
   let url = event.request.url
   
@@ -13,13 +15,13 @@ function handlefetch(event) {
   response = fetch(event.request)
   
   response.then(function(response){
-    caches.open("rivers.run").then(function(cache){
-      cache.put(url, response)
+    caches.open(maincache).then(function(cache){
+      cache.put(url, response.clone())
     })
   })
   
   response.catch(function(event){
-      caches.open("rivers.run").then(function(cache){
+      caches.open(maincache).then(function(cache){
           response = cache.match(url)
       })
   })
@@ -39,6 +41,11 @@ function handleinstall(event) {
 }
 
 function handleactivate() {
+  
+  /*event.waitUntil(function )
+  
+  */
+  
   //Take over open tabs
   clients.claim()
 }
