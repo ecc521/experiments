@@ -32,8 +32,7 @@ function handleinstall(event) {
   
   //Set this as the active serviceworker
   self.skipWaiting()
-  //Lets begin caching now, and establish this as the serviceworker
-  //Note that we may get some older data in cache. This will need to be cleared.
+  //Take over open tabs
   clients.claim()
 }
 
