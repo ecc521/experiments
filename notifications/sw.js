@@ -10,14 +10,18 @@ async function handlefetch(event) {
   //Network, fall back to cache
   let response, cache;
   
-  response = await fetch(event.request)
-  cache = await caches.open("rivers.run")
-
+  response = fetch(event.request)
+  
+  response.then(function(){
+    cache.put(url, response)
+  })
+  
   response.catch(function(event){
-      response = cache.match(url)
+      caches.open("rivers.run").then(function(cache){
+          response = cache.match(url)
+      })
   })
 
-  cache.put(url, response)
 
   let keys = await cache.keys()
   console.log(keys)
