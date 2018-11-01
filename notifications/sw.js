@@ -1,6 +1,9 @@
 async function handlefetch(event) {
   let url = event.request.url
   
+  //USGS data is date dependent. We should therefore ignore the query parameter
+  url = url.slice(0, url.indexOf("?"))
+  
   console.log(event)
   console.log(url)
   
@@ -11,8 +14,7 @@ async function handlefetch(event) {
   cache = await caches.open("rivers.run")
 
   response.catch(function(event){
-      //USGS data is date dependent. We should therefore ignore the query parameter
-      response = cache.match(request, {ignoreSearch:true})
+      response = cache.match(url)
   })
 
   cache.put(url, response)
