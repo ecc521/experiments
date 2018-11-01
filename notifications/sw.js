@@ -29,6 +29,12 @@ function handleinstall(event) {
   cache.keys().then(function(keys){
     console.log(keys)
   })
+  
+  //Set this as the active serviceworker
+  self.skipWaiting()
+  //Lets begin caching now, and establish this as the serviceworker
+  //Note that we may get some older data in cache. This will need to be cleared.
+  clients.claim()
 }
 
 
