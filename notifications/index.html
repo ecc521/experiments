@@ -12,7 +12,7 @@
       const baseurl = "https://ecc521.github.io/experiments/notifications/"
       
       ;(async function() {
-        let sw = navigator.serviceWorker.register(baseurl + "sw.js")
+        let sw = await navigator.serviceWorker.register(baseurl + "sw.js")
 
         Notification.requestPermission()
 
