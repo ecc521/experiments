@@ -42,7 +42,9 @@
         window.sw = await navigator.serviceWorker.register(baseurl + "sw.js")
 
         await Notification.requestPermission()
-
+        console.log(navigator.storage)
+        await navigator.storage.persist()
+        
         let title = '___ River Is Running!';
         let body = "Are you ready to go paddling? ___ river is flowing at ___ cfs or a gauge height of __ feet. Water temperature is ___ degrees. "
         rivernotification(title, body)
