@@ -16,7 +16,7 @@ function handlefetch(event) {
   
   response.then(function(response){
     caches.open(maincache).then(function(cache){
-      cache.put(url, response.clone())
+      cache.put(url, response)
     })
   })
   
@@ -26,7 +26,7 @@ function handlefetch(event) {
       })
   })
   
-  event.respondWith(response)
+  event.respondWith(response.clone())
 }
 
 
