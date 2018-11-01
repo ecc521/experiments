@@ -21,6 +21,17 @@
         }
       }
       
+      const rivernotification = function(title, body) {
+        let options = {
+          icon: "https://rivers.run/resources/192pxDrop.png",
+          badge: "https://rivers.run/resources/32pxDrop.png",
+          dir: "ltr",
+          sound: baseurl + 'waterfall.mp3',
+          body: body
+        };
+        sw.showNotification(title, options);
+      }
+      
       
       ;(async function() {
         
@@ -33,16 +44,9 @@
         await Notification.requestPermission()
 
         let title = '___ River Is Running!';
-        let options = {
-          icon: "https://rivers.run/resources/192pxDrop.png",
-          badge: "https://rivers.run/resources/32pxDrop.png",
-          dir: "ltr",
-          sound: baseurl + 'waterfall.mp3',
-          body: 'Are you ready to go paddling? ___ river is flowing at ___ cfs or a gauge height of __ feet. Water temperature is ___ degrees. '
-        };
-        sw.showNotification(title, options);
+        let body = "Are you ready to go paddling? ___ river is flowing at ___ cfs or a gauge height of __ feet. Water temperature is ___ degrees. "
+        rivernotification(title, body)
         }())
-      
     </script>
     
     
