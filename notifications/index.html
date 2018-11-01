@@ -12,6 +12,7 @@
       const baseurl = "https://ecc521.github.io/experiments/notifications/";
       
       let permissions = {}
+      //Check what permissions we have
       const getpermissions = async function() {
         //Permissions to check
         let check = ["background-sync", "geolocation", "notifications", "persistent-storage"]
@@ -31,9 +32,9 @@
 
         await Notification.requestPermission()
 
-        let title = 'Simple Title';
+        let title = '___ River Is Running!';
         let options = {
-          body: 'Simple piece of body text.\nSecond line of body text :)'
+          body: 'Are you ready to go paddling? ___ river is flowing at ___ cfs or a gauge height of __ feet. Water temperature is ___ degrees. '
         };
         sw.showNotification(title, options);
         }())
