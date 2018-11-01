@@ -25,18 +25,22 @@ function handlefetch(event) {
   event.respondWith(response)
 }
 
+
+
 function handleinstall(event) {
   cache.keys().then(function(keys){
     console.log(keys)
   })
   
-  //Set this as the active serviceworker
+  //Install ServiceWorker Immediently
   self.skipWaiting()
+}
+
+function handleactivate() {
   //Take over open tabs
   clients.claim()
 }
 
-
-
 self.addEventListener("fetch", handlefetch) 
 self.addEventListener("install", handleinstall)
+self.addEventListener("activate", handleactivate)
