@@ -1,4 +1,4 @@
-async function handlefetch(event) {
+function handlefetch(event) {
   let url = event.request.url
   
   //USGS data is date dependent. We should therefore ignore the query parameter
@@ -12,7 +12,7 @@ async function handlefetch(event) {
   
   response = fetch(event.request)
   
-  response.then(function(){
+  response.then(function(response){
     cache.put(url, response)
   })
   
@@ -21,13 +21,17 @@ async function handlefetch(event) {
           response = cache.match(url)
       })
   })
-
-
-  let keys = await cache.keys()
-  console.log(keys)
-  
   
   event.respondWith(response)
 }
 
+function handleinstall(event) {
+  cache.keys().then(function(keys){
+    console.log(keys)
+  })
+}
+
+
+
 self.addEventListener("fetch", handlefetch) 
+self.addEventListener("install", handleinstall)
