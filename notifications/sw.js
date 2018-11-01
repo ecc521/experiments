@@ -13,7 +13,9 @@ function handlefetch(event) {
   response = fetch(event.request)
   
   response.then(function(response){
-    cache.put(url, response)
+    caches.open("rivers.run").then(function(cache){
+      cache.put(url, response)
+    })
   })
   
   response.catch(function(event){
