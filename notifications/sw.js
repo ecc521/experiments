@@ -9,8 +9,8 @@ async function handlefetch(event) {
   
   //Network, fall back to cache
   let response, cache;
-  response = fetch(event.request)
   
+  response = await fetch(event.request)
   cache = await caches.open("rivers.run")
 
   response.catch(function(event){
