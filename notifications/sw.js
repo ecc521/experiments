@@ -14,14 +14,28 @@ function handlefetch(event) {
   event.respondWith((async function(){
     let cache = await caches.open(maincache)
     let response;
+    
+    async function fromcache() {
+      console.log("Cache")
+      return caches.match(url)
+    }
+    
+    async function fromnetwork() {
+      return new Promise(function(resolve, reject){
+        fetch(event.request).then(function(response){
+          cache.put(url, response.clone())
+          console.log("Network")
+          resolve(response)
+        })
+        setTimeout(reject, 1600, "Request took too long")
+      })
+    }
+    
     try {
-      console.log("Network")
-      response = await fetch(event.request)
-      cache.put(url, response.clone())
+      await fromnetwork()
     }
     catch (e){
-      console.log("Cache")
-      response = await caches.match(url)
+      await fromcache()
     }    
     
     console.log(response)
