@@ -11,23 +11,24 @@ function handlefetch(event) {
   
   //Network, fall back to cache
   
-  let response = fetch(event.request)
+  event.respondWith(async function(){
+    let response = await fetch(event.request)
+    let cache = await caches.open(maincache)
   
-  let promise = caches.open(maincache).then(function(cache){
+    //If response good
+    cache.put(url, response.clone())
     
-    response.then(function(response){
-      cache.put(url, response.clone())
-      return response
-    })
-  
-    response.catch(function(){
-      return cache.match(url)
-    })
+    /*
+    Else
+    response = await caches.match(url)
+    */
     
+    
+    console.log(response)
+    return response
   })
   
 
-  event.respondWith(promise)
 }
 
 
