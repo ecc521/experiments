@@ -32,8 +32,11 @@ function handlefetch(event) {
 
 
 function handleinstall(event) {
-  cache.keys().then(function(keys){
-    console.log(keys)
+  
+  caches.open(maincache).then(function(cache){
+    cache.keys().then(function(keys){
+      console.log(keys)
+    })
   })
   
   //Install ServiceWorker Immediently
