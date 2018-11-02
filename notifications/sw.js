@@ -22,10 +22,14 @@ function handlefetch(event) {
     
     async function fromnetwork() {
       return new Promise(function(resolve, reject){
-        fetch(event.request).then(function(response){
+        let request = fetch(event.request)
+        request.then(function(response){
           cache.put(url, response.clone())
           console.log("Network")
           resolve(response)
+        })
+        request.catch(function(event){
+          reject(event)
         })
         setTimeout(reject, 1600, "Request took too long")
       })
@@ -35,6 +39,7 @@ function handlefetch(event) {
       response = await fromnetwork()
     }
     catch (e){
+      console.log(e)
       response = await fromcache()
     }  
    
