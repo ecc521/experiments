@@ -16,6 +16,7 @@ function handlefetch(event) {
     let cache = await caches.open(maincache)
   
     //If response good
+    console.log(response)
     cache.put(url, response.clone())
     
     /*
