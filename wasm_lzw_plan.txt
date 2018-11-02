@@ -1,4 +1,0 @@
-1. Implement a Hash Table design.
-Not sure what is going to be most effecient. May want to use an existing library.
-
-2. Implement LZW
