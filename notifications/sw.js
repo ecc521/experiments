@@ -32,11 +32,12 @@ function handlefetch(event) {
     }
     
     try {
-      await fromnetwork()
+      response = await fromnetwork()
     }
     catch (e){
-      await fromcache()
-    }    
+      response = await fromcache()
+    }  
+   
     
     console.log(response)
     return response
