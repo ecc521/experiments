@@ -13,20 +13,19 @@ function handlefetch(event) {
   let response, cache;
   
   response = fetch(event.request)
+  cache = await caches.open(maincache)
   
+
   response.then(function(response){
-    caches.open(maincache).then(function(cache){
-      cache.put(url, response)
-    })
+    cache.put(url, response.clone())
+    return response
+  })
+  response.catch(function(){
+      return cache.match(url)
   })
   
-  response.catch(function(event){
-      caches.open(maincache).then(function(cache){
-          response = cache.match(url)
-      })
-  })
   
-  event.respondWith(response.clone())
+  event.respondWith(response)
 }
 
 
