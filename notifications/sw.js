@@ -11,7 +11,7 @@ function handlefetch(event) {
   
   //Network, fall back to cache
   
-  event.respondWith(async function(){
+  event.respondWith((async function(){
     let response = await fetch(event.request)
     let cache = await caches.open(maincache)
   
@@ -27,7 +27,7 @@ function handlefetch(event) {
     
     console.log(response)
     return response
-  })
+  }()))
   
 
 }
