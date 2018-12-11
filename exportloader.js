@@ -12,6 +12,7 @@ function loadexports(instance, keepdebugmarkers) {
         if (typeof item === "function") {
             let name = key
             //Check for C++ Debug Markers, and Remove Them if Needed
+            //THIS DOESN'T ALWAYS WORK. THE MARKERS SEEM TIED TO RETURN TYPE.
             if (key.slice(0,3) === "_Z7" && key.slice(-1) === "i" && !keepdebugmarkers) {
                 name = key.slice(3, key.length-1)  
             }
