@@ -1,0 +1,122 @@
+
+<script>
+var squarer;
+
+    
+    
+    
+    
+    
+    
+    
+//Pass in a WebAssembly instance as the first parameter.
+//This will create (or add to) a global WebAssembly object containing all the functions exported by the instance.
+//Wrap C++ functions in extern "C" {} so that names aren't mangled
+    
+    
+function loadexports(instance, keepdebugmarkers) {
+    if (!window.wasm) {
+    window.wasm = {}
+    } 
+    for (let key in instance.exports) {
+        let item = instance.exports[key]
+        //We don't want any non-functions like the memory object
+        if (typeof item === "function") {           
+            if (window.wasm[key]) {
+                console.warn("Overwriting WebAssembly Module Named " + key)    
+            }
+            window.wasm[key] = item   
+        } 
+    }  
+}
+
+    
+    
+    
+    
+    
+  
+    
+async function createmodule(url) {
+  let module;
+  let resp = await fetch(url)
+  let buff = await resp.arrayBuffer()
+  module = await WebAssembly.compile(buff)
+  
+  return module
+};
+    
+ 
+(async function() {
+    
+let module = await createmodule('http://127.0.0.1:9999/test5.wasm')
+
+//Lets creae
+
+
+
+
+    
+function progress() {
+    console.log("Progress") 
+}
+    
+function complete() {
+    console.log("Complete") 
+}
+    
+    
+//Memory isn't working...
+//let memory = new WebAssembly.Memory({initial:20, maximum:100});
+//Each WebAssembly Page is 64KiB (65536 Bytes)
+    
+//let memory = new WebAssembly.Memory({initial:20, maximum:100});
+    
+
+    
+    
+let importobj = {
+    //env is JavaScript functions made available to WebAssembly
+    env: {
+        console: function(value) {console.log(value)},
+        complete: function() {console.log("complete")}
+    }//,
+    //memory:memory
+};
+    
+let instance = await WebAssembly.instantiate(module, importobj);
+    
+console.log(instance)
+//console.log(memory)  
+loadexports(instance)
+//loadexports Writes all exports to window.wasm
+//It removes C++ debug markers unless true is passed as second argument
+    
+
+console.log(window.wasm)
+
+    
+    
+    
+    let memory = instance.exports.memory;
+    memory.grow(9);
+	    
+    console.log(memory.buffer.byteLength)
+    console.log(memory)
+    let buflen = 100000
+    let ptr = wasm.allocate(buflen)
+    console.log(ptr)
+    let strBuf = new Uint8Array(memory.buffer, ptr, buflen);
+    console.log(strBuf)
+	
+	
+    let ptr2 = wasm.set(ptr, buflen)
+    console.log(ptr2)
+    let modbuf = new Uint8Array(memory.buffer, ptr, buflen);
+    console.log(modbuf)
+    
+    
+   
+}());
+ 
+</script>

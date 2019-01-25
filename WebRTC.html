@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <title>WebRTC chat</title>
+  </head>
+  <body>
+    <h1>WebRTC Serverless Communitcation</h1>
+      
+    <div id="output"></div>
+      <br>
+      
+    <button id="create">Create a Communication Channel</button>
+    <button id="join">Join a Communication Channel</button>
+    <button id="auth" hidden="true">Authorize a Communication Channel</button>
+      
+    <div id="msgsend" hidden="true">
+    <textarea id="input" placeholder="Type your Message Here" rows="10"></textarea>
+    <button>Add File (BROKEN)</button>
+    <button id="send">Send Message</button>
+    </div>  
+        
+        
+    <style>
+        
+    h1 {
+        text-align:center;
+        }
+        
+    #input, #output {
+        width:100%;
+        word-break:break-word;
+        }
+        
+    </style>
+      
+      
+      
+    <script>
+        
+      console.oldlog = console.log
+        
+      console.log = function(d) {
+          GetId("output").innerHTML += "<br>" + d.split("\n").join("<br>")
+          console.oldlog(d)
+      } 
+        
+        
+        
+      function GetId(n) {return document.getElementById(n)}
+        
+      GetId("send").addEventListener("click", function(){
+        say(GetId("input").value)
+        GetId("input").value = ""
+      })
+        
+        
+        
+      function authcode() {
+        var input = prompt("Input your authorization code:")
+         try {
+          gotAnswer(JSON.parse(atob(input)))
+          }
+          catch(e) {
+          alert("Error authorizing. Check your authorization code.\n\n" + e)
+          console.error(e)
+          }
+      }
+        
+      function joincode() {
+          var input = prompt("Input your extremely long join code:")
+          try {
+          join(JSON.parse(atob(input)))
+          }
+          catch(e) {
+          alert("Error joining. Check your join code.\n\n" + e)
+          console.error(e)
+          }
+      }
+        
+        
+      function erroralert(e) {
+          if (typeof(e) === "object") {
+              try{e = JSON.stringify(e)}catch(e){}
+          }
+          alert("There was an error:\n" + e + "\n\nYou can see more in the developer console.")
+          console.error(e)
+      }
+        
+      window.addEventListener("error", erroralert)
+      GetId("create").addEventListener("click", create)
+      GetId("join").addEventListener("click", joincode)
+      GetId("auth").addEventListener("click", authcode)
+        
+      //Vendor Prefixes
+      var RTCPeerConnection = window.RTCPeerConnection || webkitRTCPeerConnection || mozRTCPeerConnection;
+      
+      var config = {
+          'iceServers': [
+              {
+                  'urls': [
+                      'stun:stun.l.google.com:19302'
+                  ]
+              }
+          ]
+      }
+      
+      //RTC Connection
+      var conn = new RTCPeerConnection(config);
+        
+      //Data Channel Name
+      var name = "datachannel1" 
+      
+        
+      //console.log('Type create() and hit enter to create a room, or join("some offer")');
+        
+        
+      function create() {
+          
+        console.log("Creating ...");
+          
+        var dataChannel = conn.createDataChannel(name);
+        dataChannel.onopen = (e) => {
+          window.say = (msg) => { dataChannel.send(msg); };
+        };
+        dataChannel.onmessage = (e) => { console.log('Got message:' + e.data); };
+          
+        conn.createOffer({})
+          .then((desc) => conn.setLocalDescription(desc))
+          .then(() => {})
+          .catch((err) => console.error(err));
+        conn.onicecandidate = (e) => {
+          if (e.candidate == null) {
+            console.log("Your join code is:\n " + btoa(JSON.stringify(conn.localDescription)));
+            GetId("auth").hidden = ""
+          }
+        };
+        window.gotAnswer = (answer) => {
+          console.log("Initializing ...");
+          conn.setRemoteDescription(new RTCSessionDescription(answer));
+          GetId("msgsend").hidden = ""
+        };
+      }
+        
+        
+
+      function join(offer) {
+        console.log("Joining ...");
+
+        conn.ondatachannel = (e) => {
+          var dataChannel = e.channel;
+          dataChannel.onopen = (e) => {
+            window.say = (msg) => { dataChannel.send(msg); };
+            console.log('Say things with say("hi")');
+          };
+          dataChannel.onmessage = (e) => { console.log('Got message:' + e.data); }
+        };
+
+        conn.onicecandidate = (e) => {
+          if (e.candidate == null) {
+            console.log("Have the creator authorize your connection with this code:\n" +btoa(JSON.stringify(conn.localDescription)));
+          }
+        };
+
+        var offerDesc = new RTCSessionDescription(offer);
+        conn.setRemoteDescription(offerDesc);
+        conn.createAnswer({}).then(function(answerDesc) {
+            conn.setLocalDescription(answerDesc)
+            GetId("msgsend").hidden = ""
+        })
+      }
+        
+        
+    </script>
+  </body>
+</html>
