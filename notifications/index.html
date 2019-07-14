@@ -8,9 +8,9 @@
   <body>
     <script>
       'use strict'
-      
+
       const baseurl = "https://ecc521.github.io/experiments/notifications/";
-      
+
       let permissions = {}
       //Check what permissions we have
       const getpermissions = async function() {
@@ -20,37 +20,37 @@
           permissions[check[i]] = await navigator.permissions.query({name:check[i]})
         }
       }
-      
+
       const rivernotification = function(title, body) {
         let options = {
-          icon: "https://rivers.run/resources/192pxDrop.png",
-          badge: "https://rivers.run/resources/32pxDrop.png",
+          icon: "https://rivers.run/resources/icons/192x192-Water-Drop.png",
+          badge: "https://rivers.run/resources/icons/32x32-Water-Drop.png",
           dir: "ltr",
           sound: baseurl + 'waterfall.mp3',
           body: body
         };
         sw.showNotification(title, options);
       }
-      
-      
+
+
       ;(async function() {
-        
+
         getpermissions().then(function(){
           console.log(permissions)
         })
-        
-        window.sw = await navigator.serviceWorker.register(baseurl + "sw.js")
 
+        navigator.serviceWorker.register(baseurl + "sw.js")
+        window.sw = await navigator.serviceWorker.ready
         await Notification.requestPermission()
         console.log(navigator.storage)
         await navigator.storage.persist()
-        
+
         let title = '___ River Is Running!';
         let body = "Are you ready to go paddling? ___ river is flowing at ___ cfs or a gauge height of __ feet. Water temperature is ___ degrees. "
         rivernotification(title, body)
         }())
     </script>
-    
-    
+
+
   </body>
 </html>
